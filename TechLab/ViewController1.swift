@@ -326,24 +326,24 @@ class ViewController1: NSViewController{
         
         
         insertToTable();
-
-        
-       //self.performSegueWithIdentifier("backtoMainWindowSegue", sender: sender)
         
     }
-    
+
     //------------------------------------Add Order Segue------------------------------------------------------
     
      func insertToTable() ->  Void {
         
-        //let mainWindow: MainViewController = segue.destinationController as! MainViewController;
-        
-       self.mainWindow?.printOrderArray = self.printOrderArray;
+        let tableCount : Int = (self.mainWindow?.mainTable.numberOfRows)!;
+        let arrayCount: Int = printOrderArray.count;
+        self.mainWindow?.printOrderArray = self.printOrderArray;
 
         //Insert new row in the table view
-        let newRowIndex = 0;//mainWindow.printOrderArray.count;
-        self.mainWindow?.mainTable.insertRowsAtIndexes(NSIndexSet(index: newRowIndex), withAnimation: NSTableViewAnimationOptions());
-        
+        let newRowIndex = mainWindow!.printOrderArray.count;
+
+        for i in tableCount...arrayCount-1 {
+            self.mainWindow?.mainTable.insertRowsAtIndexes(NSIndexSet(index: newRowIndex), withAnimation: NSTableViewAnimationOptions());
+            self.mainWindow?.countIndex++;
+        }
         
         
         //clears all the info from the main window so that another project may be added

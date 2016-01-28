@@ -580,19 +580,28 @@ class ViewController: NSViewController{
         
         
     }
-    
-    //------------------------------------Segue------------------------------------------------------
-    
-    override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) ->  Void {
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         if(arrayOfFileLocations.count == 0){
-            print("yes it is empty");
             let notification = NSAlert();
             notification.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
             notification.messageText = "Please choose at least one file.";
             notification.runModal();
-            return;
+            return false;
             
         }
+        else{
+            return true;
+        }
+        
+        
+        
+    }
+    //------------------------------------Segue------------------------------------------------------
+    
+    override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) ->  Void {
+        
+        shouldPerformSegueWithIdentifier("PackageSegue", sender: self);
+        
         
         let secondWindow: ViewController1 = segue.destinationController as! ViewController1;
         
@@ -624,7 +633,6 @@ class ViewController: NSViewController{
             
             self.printOrderArray.append(x);
         }
-        
         
         secondWindow.printOrderArray = self.printOrderArray;
         secondWindow.mainWindow = self.mainWindow;

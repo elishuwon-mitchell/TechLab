@@ -16,8 +16,8 @@ class PrintOrder: NSObject {
     var date : String?;
     var file : String?;
     
-    var pRiNtErTyPe: String?;
-    var schooooool: String?;
+    var printer: String?;
+    var schoolAssociation: String?;
     
     var paidFor = false;
     var completed = false;
