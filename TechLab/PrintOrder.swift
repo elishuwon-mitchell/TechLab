@@ -24,7 +24,10 @@ class PrintOrder: NSObject {
     var photoTaken = false;
     var emailSent = false;
     
-    var material : String?;
+    var materialValue: Double?;
+    var materialType: String?;
+    var material: String?;
+    
     var time : String?;
     var price : String?;
     var location : String?;
@@ -73,6 +76,15 @@ class PrintOrder: NSObject {
     func updateEmailSent() -> Void{
         
         self.emailSent = !self.emailSent;
+        
+    }
+    
+    func setMaterialValue( input: Double) -> Void{
+        self.materialValue = input;
+    }
+    
+    func setTypeOfMaterial( input: String) -> Void{
+        self.materialType = input;
         
     }
     

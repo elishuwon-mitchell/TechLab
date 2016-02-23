@@ -62,7 +62,12 @@ class ViewController: NSViewController{
     var raftSelection:NSString = "";
     var supportSelection:NSString = "";
     var infillSelection:NSString = "";
-    var usageSelection: NSString = "";
+    
+    var usageValue: Int = 0;
+    var usageType: String = "";
+    var usageSelection: String = "";
+    
+    
     var gramSelection: Bool = true;
     var mLSelection: Bool = false;
     var timeSelection: NSString = "";
@@ -77,6 +82,9 @@ class ViewController: NSViewController{
     @IBOutlet weak var usageLabel: NSTextField!
     @IBOutlet weak var timeLabel: NSTextField!
     @IBOutlet weak var fileLabel: NSTextField!
+    @IBOutlet var netIdLabel: NSTextField!
+    @IBOutlet var nameLabel: NSTextFieldCell!
+    @IBOutlet var printerLabel: NSTextField!
     
     //MARK: - Array for holding print order objects
     var printOrderArray = [PrintOrder]();
@@ -276,16 +284,50 @@ class ViewController: NSViewController{
         dateString = dateFormat.stringFromDate(today);
         
         
-        if ( (projectNameSelection as String).characters.count == 0) {
-            projectNameSelection = "you forgot this";
+        
+        let nameError = NSAlert();
+        nameError.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
+        nameError.messageText = "\t\t\t\t\t😱";
+        
+        //---Name Validation: Checks whether the user entered their full name, first and last name
+        let tempName = (nameSelection as String).stringByTrimmingCharactersInSet( NSCharacterSet.whitespaceAndNewlineCharacterSet());
+        if(!tempName.containsString(" ")){
+            
+            nameLabel.textColor = NSColor.redColor();
+            nameError.messageText = "\n\tPlease enter your first and last name: \n\t\t ex: Daenerys Targaryen";
+        }else{
+            nameLabel.textColor = NSColor.blackColor();
+        }
+        
+        
+        //---Net Id Validation: Checks wheter the user entered their netID correctly
+        if(netIdSelection.length == 0 || Int(netIdSelection.substringToIndex(1)) != nil){
+            nameError.messageText = nameError.messageText + "\n\n\t Please enter your NetID: \n\t\t ex: dtarg34";
+            netIdLabel.textColor = NSColor.redColor();
+        }
+        else{
+            netIdLabel.textColor = NSColor.blackColor();
+            
+        }
+        
+        //If there was an error with the name or netID, run the error popup alert
+        if(nameError.messageText != "\t\t\t\t\t😱"){
+            nameError.runModal();
+            return;
         }
         
         
         
-        //The following code validates the user input for the usage, time, and file fields
+        if ( (projectNameSelection as String).characters.count == 0) {
+            projectNameSelection = "Please Choose a Project Name";
+        }
         
-        let fileErrorPopUp = NSAlert();
-        fileErrorPopUp.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0))
+        
+        
+        //---The following code validates the user input for the usage, time, and file fields
+        
+        let inputErrorPopUp = NSAlert();
+        inputErrorPopUp.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
         var usageInputError = ""
         var timeInputError = "";
         var fileInputError = "";
@@ -321,6 +363,8 @@ class ViewController: NSViewController{
         
         let hoursAndMinutes = hours.stringValue + minutes.stringValue;
         for char in hoursAndMinutes.characters{
+            //If the user entered 0 hours and 00 minutes
+            
             //If the character is not a number, the error message will be generated
             if( char >= "\u{30}" && char <= "\u{39}"){
                 timeLabel.textColor = NSColor.blackColor();
@@ -335,6 +379,13 @@ class ViewController: NSViewController{
                 break;
             }
         }
+        if( Int(hoursAndMinutes) == 0){
+            timeLabel.textColor = NSColor.redColor();
+            timeInputError = "--> The time of the print cannot be 0:00.";
+            inputErrorAlert = true;
+            
+        }
+        
         //If the user did not enter any information in the time section
         if(
             
@@ -376,14 +427,35 @@ class ViewController: NSViewController{
         }
         //If any input error occured an alert window will open with details about the error(s)
         if(inputErrorAlert){
-            fileErrorPopUp.messageText = "\t\t\t\t😱\n\t\tCorrect the following:\n\n" + tempString;
-            fileErrorPopUp.runModal();
+            inputErrorPopUp.messageText = "\t\t\t\t😱\n\t\tCorrect the following:\n\n" + tempString;
+            inputErrorPopUp.runModal();
             return;
         }
+        
+        
+        
+        let printerFileError = NSAlert();
+        var isPrinterFileError = false;
+        printerFileError.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
+        
+        let tempExt = fileLocationSelection.pathExtension;
+        if( (tempExt == "amf" && printerSelection != "TAZ") || (tempExt == "thing" && printerSelection != "Replicator") || (tempExt == "form" && printerSelection != "Form1+")){
+            printerFileError.messageText = "\t\t\t\t😱 \n\t \tPrinter and File Mismatch Error\n\nPlease make sure the file corressponds to the correct printer: \n\n .thing (Replicator) \n .form (Form1+) \n .amf   (TAZ)";
+            isPrinterFileError = true;
+            printerLabel.textColor = NSColor.redColor();
+            fileLabel.textColor = NSColor.redColor();
+        }
+        
+        if(isPrinterFileError){
+            printerFileError.runModal();
+            return;
+        }
+        
         
         usageLabel.textColor = NSColor.blackColor();
         timeLabel.textColor = NSColor.blackColor();
         fileLabel.textColor = NSColor.blackColor();
+        printerLabel.textColor = NSColor.blackColor();
         
         let temp = " Name: \(nameSelection) \n Phone number: \(phoneNumberSelection) \n Date: \(dateString) \n NetID: \(netIdSelection) \n School: \(schoolSelection) \n \n Printer Type: \(printerSelection) \n Color Preference: \(colorSelection) \n Infill Preference: \(infillSelection) \n Supports: \(supportSelection) \n Raft: \(raftSelection) \n Resolution: \(resolutionSelection) \n \n Estimated Material Usage: \((usageSelection as String) + getUsageUnits()) \n Estimated Time to print: \(timeSelection) \n \n What is this for: \(purposeSelection)";
         
@@ -516,12 +588,14 @@ class ViewController: NSViewController{
         
         gramSelection = true;
         mLSelection = false;
+        usageType = "g";
         
     }
     @IBAction func mLUsage(sender: AnyObject) {
         
         mLSelection = true;
         gramSelection = false;
+        usageType = "mL";
         
     }
     
@@ -627,6 +701,11 @@ class ViewController: NSViewController{
             let x: PrintOrder = PrintOrder.init(name: nameSelection as String, netID: netIdSelection as String, date: dateString as String);
             x.setOrderNumber(printOrderArray.count + 1);
             x.setfile(fileCol[i]);
+            let stringArray = usageCol[i].componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet);
+            let type = (usageCol[i].componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet()) as NSArray).componentsJoinedByString("");
+            let value = Double(stringArray.joinWithSeparator(""));
+            x.setMaterialValue(value!);
+            x.setTypeOfMaterial(type);
             x.updateMaterial(usageCol[i]);
             x.updateTime(timeCol[i]);
             x.updatePrice(priceCol[i]);

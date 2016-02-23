@@ -82,9 +82,11 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                                        <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
+                                        <menuItem title="View Statistics" id="aOK-CA-adg">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
+                                                <action selector="viewStats:" target="Voe-Tx-rLC" id="XBS-OW-hYw"/>
+                                                <segue destination="lPv-y3-rjn" kind="modal" identifier="StatsSegue" id="VRR-wf-JeO"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Save…" keyEquivalent="s" id="pxx-59-PXV">
@@ -101,6 +103,11 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="revertDocumentToSaved:" target="Ady-hI-5gd" id="iJ3-Pv-kwq"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
+                                            <connections>
+                                                <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="aJh-i4-bef"/>
@@ -1711,7 +1718,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="1aL-6V-afz">
-                                                            <rect key="frame" x="151" y="1" width="113" height="17"/>
+                                                            <rect key="frame" x="150" y="1" width="113" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="QQe-TT-8HM">
@@ -1748,7 +1755,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="1cZ-mr-FTt">
-                                                            <rect key="frame" x="267" y="1" width="113" height="17"/>
+                                                            <rect key="frame" x="265" y="1" width="113" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="0oL-Ic-MRx">
@@ -1785,7 +1792,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Bcu-om-TTc">
-                                                            <rect key="frame" x="383" y="1" width="114" height="17"/>
+                                                            <rect key="frame" x="380" y="1" width="114" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="juD-IX-c5h">
@@ -1985,9 +1992,12 @@
                         <outlet property="infoTable" destination="2IE-bp-CZc" id="RHY-ly-z9B"/>
                         <outlet property="minutes" destination="YpQ-pj-WEL" id="EHQ-ij-OB6"/>
                         <outlet property="name" destination="oAw-32-5Nl" id="BJd-ac-2nU"/>
+                        <outlet property="nameLabel" destination="OMs-g8-Pos" id="BAQ-OV-AMP"/>
                         <outlet property="netId" destination="t2k-pr-0gB" id="dHj-2T-b98"/>
+                        <outlet property="netIdLabel" destination="wK6-vd-jLT" id="qNQ-Ji-ljp"/>
                         <outlet property="phoneNumber" destination="HYk-Zb-7KE" id="Sdx-p6-224"/>
                         <outlet property="printer" destination="ysX-Ym-CX4" id="k2K-wo-G15"/>
+                        <outlet property="printerLabel" destination="AXO-sf-pIG" id="gn5-gK-yF0"/>
                         <outlet property="projectName" destination="k9o-3q-fyX" id="44d-mE-GKS"/>
                         <outlet property="purpose" destination="HKe-mh-q74" id="X7r-2S-32S"/>
                         <outlet property="raft" destination="qUe-0y-yts" id="ly2-Of-LX6"/>
@@ -2006,6 +2016,134 @@
                 <customObject id="5Nn-E8-KfG" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-9880" y="-5304.5"/>
+        </scene>
+        <!--Statitics Controller-->
+        <scene sceneID="ZLz-de-gtW">
+            <objects>
+                <viewController id="lPv-y3-rjn" customClass="StatiticsController" customModule="TechLab" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Fmn-mk-qyk">
+                        <rect key="frame" x="0.0" y="0.0" width="552" height="401"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oE0-9V-0iz">
+                                <rect key="frame" x="134" y="322" width="96" height="22"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="HKH-WL-0hX">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CZf-yN-NUM">
+                                <rect key="frame" x="418" y="322" width="96" height="22"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="FbQ-bi-oD6">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0xj-XF-QEv">
+                                <rect key="frame" x="134" y="266" width="96" height="22"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bji-LP-GqE">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m45-Hi-T0T">
+                                <rect key="frame" x="418" y="266" width="96" height="22"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bwe-sE-JEO">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L0v-Ng-YkE">
+                                <rect key="frame" x="269" y="71" width="233" height="144"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="HE8-iY-Sgx">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q2l-hT-zAJ">
+                                <rect key="frame" x="439" y="13" width="81" height="32"/>
+                                <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="17D-98-hwp">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="export:" target="lPv-y3-rjn" id="yAm-ZD-9aT"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mxl-uA-mEE">
+                                <rect key="frame" x="32" y="315" width="96" height="29"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Total Usage (g)" id="v2y-52-9xC">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CF9-ht-e6Y">
+                                <rect key="frame" x="295" y="315" width="107" height="29"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Total Usage (mL)" id="Oar-YM-PoJ">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SpE-bd-T75">
+                                <rect key="frame" x="32" y="259" width="96" height="29"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Total Price" id="eDF-9f-Y5L">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="quI-BF-Gkt">
+                                <rect key="frame" x="295" y="259" width="96" height="29"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Total Time" id="KrN-z1-LAM">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bFB-AW-1OU">
+                                <rect key="frame" x="30" y="186" width="294" height="29"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Unique users by School Assocation:" id="5KJ-6z-4X0">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LIe-bQ-04R">
+                                <rect key="frame" x="190" y="361" width="96" height="29"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Semester:" id="EUx-ga-x6x">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t9d-ks-oY7">
+                                <rect key="frame" x="262" y="368" width="96" height="22"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="sOE-KZ-eHY">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="semester" destination="t9d-ks-oY7" id="DrT-ci-j2p"/>
+                        <outlet property="totalGram" destination="oE0-9V-0iz" id="qvz-Uv-HgA"/>
+                        <outlet property="totalML" destination="CZf-yN-NUM" id="osZ-Dp-k08"/>
+                        <outlet property="totalPrice" destination="m45-Hi-T0T" id="d1W-pW-58c"/>
+                        <outlet property="uniqueUsers" destination="L0v-Ng-YkE" id="pcE-gV-21E"/>
+                    </connections>
+                </viewController>
+                <customObject id="gMP-lm-Xb0" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-9267" y="-6958.5"/>
         </scene>
         <!--EULA-->
         <scene sceneID="QeI-Eu-RDB">
