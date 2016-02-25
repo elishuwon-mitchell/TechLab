@@ -17,6 +17,8 @@
 		706D57AD1C6A7B3100DDC5FB /* StatisticsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706D57AC1C6A7B3100DDC5FB /* StatisticsController.swift */; };
 		7075DA2C1C4EA1F300C748C9 /* PrintOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7075DA2B1C4EA1F300C748C9 /* PrintOrder.swift */; };
 		70DE8A4F1C48041200EBB8DE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE8A4E1C48041200EBB8DE /* MainViewController.swift */; };
+		70EAB5271C7CBF170074CE9B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70041ACE1C4596B0006CB5A8 /* Main.storyboard */; };
+		70EAB5281C7CBF1B0074CE9B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70041ACE1C4596B0006CB5A8 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -249,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70EAB5271C7CBF170074CE9B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70EAB5281C7CBF1B0074CE9B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
