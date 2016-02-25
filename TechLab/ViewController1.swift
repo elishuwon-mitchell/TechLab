@@ -336,7 +336,7 @@ class ViewController1: NSViewController{
         let tableCount : Int = (self.mainWindow?.mainTable.numberOfRows)!;
         let arrayCount: Int = printOrderArray.count;
         self.mainWindow?.printOrderArray = self.printOrderArray;
-
+        
         //Insert new row in the table view
         let newRowIndex = mainWindow!.printOrderArray.count;
 

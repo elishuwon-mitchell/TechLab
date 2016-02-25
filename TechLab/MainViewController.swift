@@ -27,10 +27,6 @@ class MainViewController: NSViewController{
         
     }
 
-    
-    
-    
-    
     //------------------------------------Add Print Job Order------------------------------------------------------
 
     @IBAction func addOrder(sender: AnyObject) {
@@ -50,18 +46,8 @@ class MainViewController: NSViewController{
         infoWindow.mainWindow = self;
         
     }
-    
-    
-    
-    
-    
-    
-    
+   
 }
-
-
-
-
 
 // MARK: - NSTableViewDataSource
 extension MainViewController: NSTableViewDataSource{
@@ -83,26 +69,6 @@ extension MainViewController: NSTableViewDataSource{
         let view: NSTableCellView = tableView.makeViewWithIdentifier(tableColumn!.identifier, owner: self) as! NSTableCellView
         
        //Inserting the print order data into the main view table
-//
-//        for x in printOrderArray{
-//     
-//            switch tableColumn!.identifier {
-//                case "queueNumberColumn" : view.textField!.stringValue = "\(x.orderNumber!)";
-//                case "customerNameColumn" : view.textField!.stringValue = x.customerName!;
-//                case "customerNetIDColumn" : view.textField!.stringValue = x.netID!;
-//                case "dateColumn" : view.textField!.stringValue = x.date!;
-//                case "fileNameColumn" : view.textField!.stringValue = x.file!;
-//                case "paidColumn" : view.textField!.stringValue = "\(x.paidFor)";
-//                case "completedColumn" : view.textField!.stringValue = "\(x.completed)";
-//                case "photoColumn" : view.textField!.stringValue = "\(x.photoTaken)";
-//                case "emailSentColumn" : view.textField!.stringValue = "\(x.emailSent)";
-//                case "materialColumn" : view.textField!.stringValue = x.material!;
-//                case "timeColumn" : view.textField!.stringValue = x.time!;
-//                case "priceColumn" : view.textField!.stringValue = x.price!;
-//                case "locationColumn" : view.textField!.stringValue = "";
-//                default : view.textField!.stringValue = "Error";
-//            }
-//        }
         
         let x = printOrderArray[countIndex];
 

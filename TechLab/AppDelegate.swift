@@ -10,12 +10,12 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
-    var mainVC = MainViewController();
-
+    var pArray : [PrintOrder] = [];
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
-        
+
+
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -29,7 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) ->  Void {
-        let mainTable = MainViewController();
+        
 //        let stats = segue.destinationController as! StatiticsController;
 //        
 //        var price = 0;
@@ -59,14 +59,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        stats.totalGram.stringValue = "\(gram)";
 //        stats.totalML.stringValue = "\(mL)";
 //        stats.totalPrice.stringValue = "\(price)";
-        
-        print(mainTable.printOrderArray);
+       
+        print(pArray.count);
     }
 
     @IBAction func viewStats(sender: AnyObject) {
-        
-        let s = NSStoryboardSegue.init(identifier: "StatsSegue", source: self, destination: StatiticsController());
-        self.prepareForSegue(s, sender: self);
+        let viewC: MainViewController = NSStoryboard(name: "Main", bundle: nil).instantiateInitialController() as! MainViewController;
+        let s = NSStoryboardSegue.init(identifier: "StatsSegue", source: viewC, destination: StatiticsController());
+        self.prepareForSegue(s, sender: viewC);
 
         
     }

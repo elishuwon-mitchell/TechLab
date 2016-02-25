@@ -662,6 +662,9 @@
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <connections>
+                            <outlet property="delegate" destination="B8D-0N-5wS" id="Xbe-Zy-kep"/>
+                        </connections>
                     </window>
                     <connections>
                         <segue destination="6hb-br-Xp1" kind="relationship" relationship="window.shadowedContentViewController" id="zrk-hl-BHK"/>
@@ -674,7 +677,7 @@
         <!--TechLab -->
         <scene sceneID="SOv-u2-WbI">
             <objects>
-                <viewController title="TechLab " id="6hb-br-Xp1" customClass="MainViewController" customModule="TechLab" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="TechLab " storyboardIdentifier="MainVC" id="6hb-br-Xp1" customClass="MainViewController" customModule="TechLab" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="ceb-pO-bg6">
                         <rect key="frame" x="0.0" y="0.0" width="1257" height="674"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1718,7 +1721,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="1aL-6V-afz">
-                                                            <rect key="frame" x="150" y="1" width="113" height="17"/>
+                                                            <rect key="frame" x="151" y="1" width="113" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="QQe-TT-8HM">
@@ -1755,7 +1758,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="1cZ-mr-FTt">
-                                                            <rect key="frame" x="265" y="1" width="113" height="17"/>
+                                                            <rect key="frame" x="267" y="1" width="113" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="0oL-Ic-MRx">
@@ -1792,7 +1795,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Bcu-om-TTc">
-                                                            <rect key="frame" x="380" y="1" width="114" height="17"/>
+                                                            <rect key="frame" x="383" y="1" width="114" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="juD-IX-c5h">

@@ -50,35 +50,35 @@ class ViewController: NSViewController{
     //MARK: - Other useful intance variables
     var printFileName: NSString = "";
     
-    //MARK: - User inputted string values
-    var projectNameSelection: NSString = "";
-    var nameSelection: NSString = "";
-    var phoneNumberSelection: NSString = "";
-    var netIdSelection: NSString = "";
-    var schoolSelection: NSString = "";
-    var printerSelection: NSString = "";
-    var colorSelection: NSString = "";
+    //MARK: - User inputted values
+    var projectNameSelection: String = "";
+    var nameSelection: String = "";
+    var phoneNumberSelection: String = "";
+    var netIdSelection: String = "";
+    var schoolSelection: String = "";
+    var printerSelection: String = "";
+    var colorSelection: String = "";
     var resolutionSelection = "";
-    var raftSelection:NSString = "";
-    var supportSelection:NSString = "";
-    var infillSelection:NSString = "";
+    var raftSelection: String = "";
+    var supportSelection: String = "";
+    var infillSelection: String = "";
     
-    var usageValue: Int = 0;
+    var usageValue: Double = 0.0;
     var usageType: String = "";
     var usageSelection: String = "";
     
     
     var gramSelection: Bool = true;
     var mLSelection: Bool = false;
-    var timeSelection: NSString = "";
-    var awarenessSelection: NSString = "";
-    var orientationSelection: NSString = "";
-    var baseSelection: NSString = "";
-    var purposeSelection: NSString = "";
+    var timeSelection: String = "";
+    var awarenessSelection: String = "";
+    var orientationSelection: String = "";
+    var baseSelection: String = "";
+    var purposeSelection: String = "";
     var fileLocationSelection: NSString = "";
-    var dateString: NSString = "";
+    var dateString: String = "";
     
-    
+    //MARK: - Labels for text fields used for input validation
     @IBOutlet weak var usageLabel: NSTextField!
     @IBOutlet weak var timeLabel: NSTextField!
     @IBOutlet weak var fileLabel: NSTextField!
@@ -88,6 +88,8 @@ class ViewController: NSViewController{
     
     //MARK: - Array for holding print order objects
     var printOrderArray = [PrintOrder]();
+    
+    //MARK: - Reference to main controller queue
     var mainWindow: MainViewController?;
     
     
@@ -250,9 +252,155 @@ class ViewController: NSViewController{
         
         
     }
+    //------------------------------------Name and NetId Validation-------------------------------------------------------
     
+    //Checks whether the user entered their full name, first and last name and a "valid" netId
+    func validateNameandNetId(name: String, netIdString: String)-> (errorExist: Bool, message: String){
+        var errorMess = "";
+        var hasError = false;
+        let tempName = (name).stringByTrimmingCharactersInSet( NSCharacterSet.whitespaceAndNewlineCharacterSet());
+        
+        if(!tempName.containsString(" ")){
+            hasError = true;
+            nameLabel.textColor = NSColor.redColor();
+            errorMess = "\n\tPlease enter your first and last name: \n\t\t ex: Daenerys Targaryen";
+        }else{
+            nameLabel.textColor = NSColor.blackColor();
+        }
+        if(netIdString.characters.count == 0 || Int(netIdString.substringToIndex(netIdString.startIndex.advancedBy(1))) != nil){
+            hasError = true;
+            errorMess += "\n\n\t Please enter your NetID: \n\t\t ex: dtarg34";
+            netIdLabel.textColor = NSColor.redColor();
+        }
+        else{
+            netIdLabel.textColor = NSColor.blackColor();
+            
+        }
+        
+        return(hasError, errorMess);
+
+    }
     
+    //------------------------------------Usage Validation-------------------------------------------------------
     
+    //Checks if the user inputted any non numeric inputs in the usage field as well as ensures the user did indeed input something
+    func validateUsage(usageStr: String)->(errorExist: Bool, message: String){
+        var hasError = false;
+        var errorMess = "";
+        for char in usageStr.characters{
+            //If the character is not a number or a decimal point, an error message will be generated.
+            if(  (char >= "\u{30}" && char <= "\u{39}") || char == "\u{2E}"){
+                usageLabel.textColor = NSColor.blackColor();
+                continue;
+            }
+            else{
+                hasError = true;
+                errorMess = "--> Please enter only numbers or decimals into the usage section.";
+                usage.stringValue = "";
+                usageLabel.textColor = NSColor.redColor();
+                break;
+            }
+            
+        }
+        //If the user did not enter any information in the usage section
+        if(usageStr.isEmpty){
+            hasError = true;
+            errorMess = "--> Please input the estimated material usage.";
+            usageLabel.textColor = NSColor.redColor();
+        }
+        
+        return(hasError, errorMess);
+
+    }
+    
+    //------------------------------------Time Validation-------------------------------------------------------
+    
+    //Checks if the user inputted any non numeric inputs in the time field as well as ensures the user did indeed input something
+    func validateTime(hrs: String, min: String)->(errorExist: Bool, message: String){
+        var hasError = false;
+        var errorMess = "";
+        
+        let hoursAndMinutes = hrs + min;
+        
+        //If the user entered a non numeric number
+        for char in hoursAndMinutes.characters{
+                if( char >= "\u{30}" && char <= "\u{39}"){
+                timeLabel.textColor = NSColor.blackColor();
+                continue;
+            }
+            else{
+                hasError = true;
+                errorMess = "--> Please enter only numbers in the time section.";
+                hours.stringValue = "0";
+                minutes.stringValue = "0";
+                timeLabel.textColor = NSColor.redColor();
+                break;
+            }
+        }
+        
+        //If the user entered 0 hours and 00 minutes
+        if( Int(hoursAndMinutes) == 0){
+            hasError = true;
+            timeLabel.textColor = NSColor.redColor();
+            errorMess = "--> The time of the print cannot be 0:00.";
+            
+        }
+        
+        
+        //If the user did not enter any information in the time section
+        if(hoursAndMinutes.characters.count == 0){
+            hasError = true;
+            errorMess = "--> Please enter the estimated time of the print.";
+            hours.stringValue = "0";
+            minutes.stringValue = "0";
+            timeLabel.textColor = NSColor.redColor();
+        }
+        
+        return(hasError, errorMess);
+        
+    }
+    
+    //------------------------------------File Exist Validation-------------------------------------------------------
+    
+    //Checks whether a file exists at the given inputted path
+    func validateFile(filePath: String)->(errorExist: Bool, messgae: String){
+        var hasError = false;
+        var errorMess = "";
+        
+        let manager: NSFileManager = NSFileManager.defaultManager();
+        
+        //If the user did not enter or a file or entered an invalide file path, the error message will be generated
+        if( (fileLocationSelection == "") || !(manager.fileExistsAtPath(fileLocationSelection as String))){
+            hasError = true;
+            errorMess = "--> Please choose or enter a valid file.";
+            fileLocation.stringValue = "";
+            fileLabel.textColor = NSColor.redColor();
+        }
+        else{
+            fileLabel.textColor = NSColor.blackColor();
+        }
+    
+        return(hasError, errorMess);
+    }
+    
+    //------------------------------------Printer and File Type Match Validation-------------------------------------------------------
+    
+    //Checks whether the choosen file matches its corresponding printer
+    func validatePrinterFileMatch(filePath: String, printer: String)->(errorExist: Bool, message: String){
+        var hasError = false;
+        var errorMess = "";
+ 
+        let tempExt = fileLocationSelection.pathExtension;
+        if( (tempExt == "amf" && printerSelection != "TAZ") || (tempExt == "thing" && printerSelection != "Replicator") || (tempExt == "form" && printerSelection != "Form1+")){
+            hasError = true;
+            errorMess = "\t\t\t\t😱 \n\t \tPrinter and File Mismatch Error\n\nPlease make sure the file corressponds to the correct printer: \n\n .thing (Replicator) \n .form (Form1+) \n .amf   (TAZ)";
+            printerLabel.textColor = NSColor.redColor();
+            fileLabel.textColor = NSColor.redColor();
+        }
+        
+        return(hasError, errorMess);
+        
+    }
     
     //------------------------------------Add-------------------------------------------------------
     //gathers all the user entered information
@@ -269,8 +417,6 @@ class ViewController: NSViewController{
         netIdSelection = netId.stringValue;
         
         usageSelection = usage.stringValue;
-        timeSelection = hours.stringValue + ":" + minutes.stringValue + ":00";
-        
         
         projectNameSelection = projectName.stringValue;
         phoneNumberSelection = phoneNumber.stringValue;
@@ -282,49 +428,23 @@ class ViewController: NSViewController{
         let dateFormat: NSDateFormatter = NSDateFormatter();
         dateFormat.setLocalizedDateFormatFromTemplate("MM/dd/yyyy");
         dateString = dateFormat.stringFromDate(today);
-        
-        
-        
-        let nameError = NSAlert();
-        nameError.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
-        nameError.messageText = "\t\t\t\t\t😱";
-        
-        //---Name Validation: Checks whether the user entered their full name, first and last name
-        let tempName = (nameSelection as String).stringByTrimmingCharactersInSet( NSCharacterSet.whitespaceAndNewlineCharacterSet());
-        if(!tempName.containsString(" ")){
-            
-            nameLabel.textColor = NSColor.redColor();
-            nameError.messageText = "\n\tPlease enter your first and last name: \n\t\t ex: Daenerys Targaryen";
-        }else{
-            nameLabel.textColor = NSColor.blackColor();
-        }
-        
-        
-        //---Net Id Validation: Checks wheter the user entered their netID correctly
-        if(netIdSelection.length == 0 || Int(netIdSelection.substringToIndex(1)) != nil){
-            nameError.messageText = nameError.messageText + "\n\n\t Please enter your NetID: \n\t\t ex: dtarg34";
-            netIdLabel.textColor = NSColor.redColor();
-        }
-        else{
-            netIdLabel.textColor = NSColor.blackColor();
-            
-        }
-        
-        //If there was an error with the name or netID, run the error popup alert
-        if(nameError.messageText != "\t\t\t\t\t😱"){
-            nameError.runModal();
-            return;
-        }
-        
-        
+ 
         
         if ( (projectNameSelection as String).characters.count == 0) {
             projectNameSelection = "Please Choose a Project Name";
         }
-        
-        
-        
-        //---The following code validates the user input for the usage, time, and file fields
+ 
+        //---Name and NetId input validation
+        let valName = validateNameandNetId(nameSelection, netIdString: netIdSelection);
+        if(valName.errorExist){
+            let nameError = NSAlert();
+            nameError.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
+            nameError.messageText = "\t\t\t\t\t😱" + valName.message;
+            nameError.runModal();
+            return;
+        }
+       
+
         
         let inputErrorPopUp = NSAlert();
         inputErrorPopUp.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
@@ -333,87 +453,27 @@ class ViewController: NSViewController{
         var fileInputError = "";
         var inputErrorAlert = false;
         
-        
         //---Usage input validation
-        
-        for char in (usageSelection as String).characters{
-            //If the character is not a number or a decimal point, an error message will be generated.
-            if(  (char >= "\u{30}" && char <= "\u{39}") || char == "\u{2E}"){
-                usageLabel.textColor = NSColor.blackColor();
-                continue;
-            }
-            else{
-                usageInputError = "--> Please enter only numbers or decimals into the usage section.";
-                usage.stringValue = "";
-                usageLabel.textColor = NSColor.redColor();
-                inputErrorAlert = true;
-                break;
-            }
-            
-        }
-        //If the user did not enter any information in the usage section
-        if(usageSelection == ""){
-            usageInputError = "--> Please input the estimated material usage.";
-            usageLabel.textColor = NSColor.redColor();
+        let valUsage = validateUsage(usageSelection);
+        if(valUsage.errorExist){
+            usageInputError = valUsage.message;
             inputErrorAlert = true;
-            
         }
-        
+
         //---Time input validation
-        
-        let hoursAndMinutes = hours.stringValue + minutes.stringValue;
-        for char in hoursAndMinutes.characters{
-            //If the user entered 0 hours and 00 minutes
-            
-            //If the character is not a number, the error message will be generated
-            if( char >= "\u{30}" && char <= "\u{39}"){
-                timeLabel.textColor = NSColor.blackColor();
-                continue;
-            }
-            else{
-                timeInputError = "--> Please enter only numbers in the time section.";
-                hours.stringValue = "0";
-                minutes.stringValue = "0";
-                timeLabel.textColor = NSColor.redColor();
-                inputErrorAlert = true;
-                break;
-            }
-        }
-        if( Int(hoursAndMinutes) == 0){
-            timeLabel.textColor = NSColor.redColor();
-            timeInputError = "--> The time of the print cannot be 0:00.";
+        let valTime = validateTime(hours.stringValue, min: minutes.stringValue);
+        if(valTime.errorExist){
+            timeInputError = valTime.message;
             inputErrorAlert = true;
-            
         }
         
-        //If the user did not enter any information in the time section
-        if(
-            
-            hoursAndMinutes.characters.count == 0){
-                timeInputError = "--> Please enter the estimated time of the print.";
-                inputErrorAlert = true;
-                hours.stringValue = "0";
-                minutes.stringValue = "0";
-                timeLabel.textColor = NSColor.redColor();
-                
-                
-        }
-        
-        //---File input validaletn
-        let manager: NSFileManager = NSFileManager.defaultManager();
-        //If the user did not enter or a file or entered an invalide file path, the error message will be generated
-        if( (fileLocationSelection == "") || !(manager.fileExistsAtPath(fileLocationSelection as String))){
-            
-            fileInputError = "--> Please choose or enter a valid file.";
+        //---File input validaletion
+        let valFile = validateFile(fileLocationSelection as String);
+        if(valFile.errorExist){
+            fileInputError = valFile.messgae;
             inputErrorAlert = true;
-            fileLocation.stringValue = "";
-            fileLabel.textColor = NSColor.redColor();
         }
-        else{
-            fileLabel.textColor = NSColor.blackColor();
-        }
-        
-        
+  
         var tempArray = [usageInputError, timeInputError, fileInputError];
         var tempString = String();
         
@@ -425,32 +485,25 @@ class ViewController: NSViewController{
                 tempString = tempString + tempArray[i] + "\n";
             }
         }
-        //If any input error occured an alert window will open with details about the error(s)
+        //If any input error occured with usage, time, or file, an alert window will open with details about the error(s)
         if(inputErrorAlert){
             inputErrorPopUp.messageText = "\t\t\t\t😱\n\t\tCorrect the following:\n\n" + tempString;
             inputErrorPopUp.runModal();
             return;
         }
         
+        timeSelection = String(format: "%02d:%02d:00", Int(hours.stringValue)!, Int(minutes.stringValue)!);
+        usageValue = Double(usage.stringValue)!;
         
-        
-        let printerFileError = NSAlert();
-        var isPrinterFileError = false;
-        printerFileError.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
-        
-        let tempExt = fileLocationSelection.pathExtension;
-        if( (tempExt == "amf" && printerSelection != "TAZ") || (tempExt == "thing" && printerSelection != "Replicator") || (tempExt == "form" && printerSelection != "Form1+")){
-            printerFileError.messageText = "\t\t\t\t😱 \n\t \tPrinter and File Mismatch Error\n\nPlease make sure the file corressponds to the correct printer: \n\n .thing (Replicator) \n .form (Form1+) \n .amf   (TAZ)";
-            isPrinterFileError = true;
-            printerLabel.textColor = NSColor.redColor();
-            fileLabel.textColor = NSColor.redColor();
-        }
-        
-        if(isPrinterFileError){
+        //--Printer File Match validation
+        let valPrintFileMatch = validatePrinterFileMatch(fileLocationSelection as String, printer: printerSelection);
+        if(valPrintFileMatch.errorExist){
+            let printerFileError = NSAlert();
+            printerFileError.accessoryView = NSView.init(frame: NSRect(x: 0, y: 0, width: 350, height: 0));
+            printerFileError.messageText = valPrintFileMatch.message;
             printerFileError.runModal();
             return;
         }
-        
         
         usageLabel.textColor = NSColor.blackColor();
         timeLabel.textColor = NSColor.blackColor();
@@ -484,8 +537,8 @@ class ViewController: NSViewController{
         
         
         //Insert new row in the table view
-        let newRowIndex = self.fileCol.count - 1
-        self.infoTable.insertRowsAtIndexes(NSIndexSet(index: newRowIndex), withAnimation: NSTableViewAnimationOptions())
+        let newRowIndex = self.fileCol.count - 1;
+        self.infoTable.insertRowsAtIndexes(NSIndexSet(index: newRowIndex), withAnimation: NSTableViewAnimationOptions());
         
         
         //Clears the necesseary text fields and drop down menu items so that the user may add another file to the project

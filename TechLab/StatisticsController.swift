@@ -26,10 +26,12 @@ class StatiticsController: NSViewController{
         
         super.viewDidLoad();
         //semester.stringValue = "Testing Semester";
+        //self.storyboard!.getInstance();
         
     }
     
     @IBAction func export(sender: AnyObject) {
+        
     }
     
     
