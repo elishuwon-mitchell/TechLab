@@ -29,38 +29,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) ->  Void {
-        
-//        let stats = segue.destinationController as! StatiticsController;
-//        
-//        var price = 0;
-//        var gram = 0.0;
-//        var mL = 0.0;
-//        var isGram = true;
-//        
-//        for x in mainTable.printOrderArray{
-//            price = price + Int(x.price!)!;
-//            let type = x.materialType;
-//            if(type?.characters.last == "L" ){
-//                isGram = false;
-//            }
-//            
-//            if(isGram){
-//                gram  = gram + x.materialValue!;
-//                print(gram);
-//            }
-//            else{
-//                mL = mL + x.materialValue!;
-//            }
-//            
-//            
-//        }
-//        
-//        
-//        stats.totalGram.stringValue = "\(gram)";
-//        stats.totalML.stringValue = "\(mL)";
-//        stats.totalPrice.stringValue = "\(price)";
-       
-        print(pArray.count);
+
+     
     }
 
     @IBAction func viewStats(sender: AnyObject) {

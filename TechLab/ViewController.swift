@@ -492,6 +492,13 @@ class ViewController: NSViewController{
             return;
         }
         
+        if(hours.stringValue.characters.count == 0){
+            hours.stringValue = "0";
+        }
+        if(minutes.stringValue.characters.count == 0){
+            minutes.stringValue = "0";
+        }
+        
         timeSelection = String(format: "%02d:%02d:00", Int(hours.stringValue)!, Int(minutes.stringValue)!);
         usageValue = Double(usage.stringValue)!;
         
@@ -519,7 +526,7 @@ class ViewController: NSViewController{
         
         fileCol.append(printFileName as String);
         arrayOfFileLocations.append(fileLocationSelection as String);
-        priceCol.append(calculatePrice());
+        priceCol.append("$\(calculatePrice()).00");
         timeCol.append(timeSelection as String);
         
         //logic to determine whether the usage type for the print is in grams or milliliters
@@ -664,7 +671,7 @@ class ViewController: NSViewController{
     }
     //------------------------------------Price Calculation--------------------------------------------------
     //calculates the price of the print job based on the amount of material used
-    func calculatePrice() -> String{
+    func calculatePrice() -> Int{
         
         let temp_usageSelection:NSString = usageSelection;
         let temp_price = temp_usageSelection.doubleValue;
@@ -691,8 +698,9 @@ class ViewController: NSViewController{
         }
         numberArray.append(Double(temp_number));
         
-        let priceOfPrint = "$\(temp_number).00";
-        return priceOfPrint;
+//        let priceOfPrint = "$\(temp_number).00";
+//        return priceOfPrint;
+        return temp_number;
         
     }
     
@@ -754,16 +762,26 @@ class ViewController: NSViewController{
             let x: PrintOrder = PrintOrder.init(name: nameSelection as String, netID: netIdSelection as String, date: dateString as String);
             x.setOrderNumber(printOrderArray.count + 1);
             x.setfile(fileCol[i]);
-            let stringArray = usageCol[i].componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet);
-            let type = (usageCol[i].componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet()) as NSArray).componentsJoinedByString("");
-            let value = Double(stringArray.joinWithSeparator(""));
+            
+            let str: NSString = NSString(string: usageCol[i]);
+            var end = 0;
+            if(str.hasSuffix("g")){
+                end = 1;
+            }
+            else{
+                end = 2;
+            }
+            let type = str.substringFromIndex(str.length-end);
+            let value = Double(str.substringToIndex(str.length-end));
+
             x.setMaterialValue(value!);
             x.setTypeOfMaterial(type);
             x.updateMaterial(usageCol[i]);
             x.updateTime(timeCol[i]);
             x.updatePrice(priceCol[i]);
-            
+            x.schoolAssociation = schoolSelection;
             self.printOrderArray.append(x);
+            
         }
         
         secondWindow.printOrderArray = self.printOrderArray;

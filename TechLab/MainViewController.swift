@@ -14,7 +14,6 @@ class MainViewController: NSViewController{
     
     
     var printOrderArray = [PrintOrder]();
-    var countIndex = 0;
     
     @IBOutlet var mainTable: NSTableView!;
     
@@ -56,7 +55,7 @@ extension MainViewController: NSTableViewDataSource{
     //------------------------------------Number of rows in table view-------------------------------------------------------
     
     func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-        
+
         return printOrderArray.count;
         
     }
@@ -69,8 +68,7 @@ extension MainViewController: NSTableViewDataSource{
         let view: NSTableCellView = tableView.makeViewWithIdentifier(tableColumn!.identifier, owner: self) as! NSTableCellView
         
        //Inserting the print order data into the main view table
-        
-        let x = printOrderArray[countIndex];
+        let x = printOrderArray[row];
 
         switch tableColumn!.identifier {
             case "queueNumberColumn" : view.textField!.stringValue = "\(x.orderNumber!)";
@@ -88,7 +86,6 @@ extension MainViewController: NSTableViewDataSource{
             case "locationColumn" : view.textField!.stringValue = "";
             default : view.textField!.stringValue = "Error";
         }
-    
         return view;
         
     }

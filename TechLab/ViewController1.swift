@@ -66,29 +66,14 @@ class ViewController1: NSViewController{
         dateFormat.setLocalizedDateFormatFromTemplate("MM/dd/yyyy");
         let dateString = dateFormat.stringFromDate(today);
         
-        var month: String = "";
-        var day: String = "";
-        var year: String = "";
-        
-        var pointer = 0;
-        
-        for char in dateString.characters{
-            if(char == "/"){
-                pointer++;
-                continue;
-            }
-            if(pointer == 0){
-                month.append(char);
-            }
-            else if( pointer == 1){
-                day.append(char);
-            }
-            else{
-                year.append(char);
-            }
-        }
+        var temp = dateString.componentsSeparatedByString("/");
+        let month: String = temp[0];
+        let day: String = temp[1];
+        let year: String = temp[2];
         
         var term: String = "";
+        
+        
        // var termWithoutSpace: String = "";
         
         let m = Int(month);
@@ -159,7 +144,7 @@ class ViewController1: NSViewController{
                 try manager.createDirectoryAtURL(netIdDirectory, withIntermediateDirectories: true, attributes: nil);
                 
             } catch {
-                print("this does not work");
+                
             }
         }
         
@@ -230,19 +215,25 @@ class ViewController1: NSViewController{
         let waitListLocation:NSURL = desktopDirectoryForQueue.URLByAppendingPathComponent(waitList);
         let waitListInitialContent: String = "Name \t Date \t File \t Job Paid For \t Print Completed \t Photo Taken \t Email Sent \t Est. Material \t Est. Time \t Price";
         
-        if( manager.fileExistsAtPath(waitListLocation.path!)){
-            print("The List already exists");
-        }
-        else{
+//        if( manager.fileExistsAtPath(waitListLocation.path!)){
+//            print("The List already exists");
+//        }
+//        else{
+//            do{
+//                try waitListInitialContent.writeToFile(waitListLocation.path!, atomically: true, encoding: NSUTF8StringEncoding);
+//            }catch{
+//                
+//            }
+//            
+//            
+//        }
+        if( !manager.fileExistsAtPath(waitListLocation.path!)){
             do{
                 try waitListInitialContent.writeToFile(waitListLocation.path!, atomically: true, encoding: NSUTF8StringEncoding);
             }catch{
                 
             }
-            
-            
         }
-        
         
         var destinationFileLocation = [String]();
         for item in arrayOfFileNames{
@@ -282,13 +273,24 @@ class ViewController1: NSViewController{
         
         for i in 0...(arrayOfFileLocations.count - 1){
             
-            //if there is no file to copy
-            if(arrayOfFileLocations[i].characters.count == 0){
-                
-                print("No file to copy");
-                
-            }
-            else{
+//            //if there is no file to copy
+//            if(arrayOfFileLocations[i].characters.count == 0){
+//                
+//                print("No file to copy");
+//                
+//            }
+//            else{
+//                
+//                do{
+//                    try manager.copyItemAtPath(arrayOfFileLocations[i], toPath: destinationFileLocation[i]);
+//                }catch{
+//                    
+//                }
+//                
+//            }
+            
+            
+            if(arrayOfFileLocations[i].characters.count != 0){
                 
                 do{
                     try manager.copyItemAtPath(arrayOfFileLocations[i], toPath: destinationFileLocation[i]);
@@ -297,6 +299,7 @@ class ViewController1: NSViewController{
                 }
                 
             }
+            
             
         }
         
@@ -339,14 +342,12 @@ class ViewController1: NSViewController{
         
         //Insert new row in the table view
         let newRowIndex = mainWindow!.printOrderArray.count;
-
-        for i in tableCount...arrayCount-1 {
+        for _ in tableCount...arrayCount-1 {
             self.mainWindow?.mainTable.insertRowsAtIndexes(NSIndexSet(index: newRowIndex), withAnimation: NSTableViewAnimationOptions());
-            self.mainWindow?.countIndex++;
         }
         
         
-        //clears all the info from the main window so that another project may be added
+        //clears all the info from the info window so that another project may be added
         previousWindow?.clearAll(self);
         self.clearAllInstanceArrays();
         
